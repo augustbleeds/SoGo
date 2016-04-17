@@ -36,10 +36,21 @@ public class MainActivity extends AppCompatActivity {
                 if((psnName.getText().length() <= 0) && (psnEmail.getText().length() <= 0) && (psnPass.getText().length() <= 0)) {
                     Toast.makeText(MainActivity.this, "Please fill out all fields", Toast.LENGTH_LONG).show();
                 } else {
-                    
+
                 }
             }
-        )};
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if((psnName.getText().length() <= 0) && (psnEmail.getText().length() <= 0) && (psnPass.getText().length() <= 0)) {
+                    Toast.makeText(MainActivity.this, "Please fill out all fields", Toast.LENGTH_LONG).show();
+                } else {
+
+                }
+            }
+        }) ;
     }
 }
 
