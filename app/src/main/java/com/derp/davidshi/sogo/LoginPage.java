@@ -14,7 +14,7 @@ import com.firebase.client.FirebaseError;
 
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginPage extends AppCompatActivity {
 
     private EditText psnEmail;
     private EditText psnPass;
@@ -40,18 +40,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if((psnEmail.getText().length() <= 0) || (psnPass.getText().length() <= 0)) {
-                    Toast.makeText(MainActivity.this, "Please fill out all fields", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginPage.this, "Please fill out all fields", Toast.LENGTH_LONG).show();
                 } else {
                     ref = new Firebase("https://incandescent-fire-7723.firebaseIO.com/");
 
                     ref.createUser(psnEmail.getText().toString(), psnPass.getText().toString(), new Firebase.ValueResultHandler<Map<String, Object>>() {
                         @Override
                         public void onSuccess(Map<String, Object> result) {
-                            Toast.makeText(MainActivity.this, "Sign up success! Now log in!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginPage.this, "Sign up success! Now log in!", Toast.LENGTH_LONG).show();
                         }
                         @Override
                         public void onError(FirebaseError firebaseError) {
-                            Toast.makeText(MainActivity.this, firebaseError.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginPage.this, firebaseError.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -62,20 +62,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if((psnEmail.getText().length() <= 0) || (psnPass.getText().length() <= 0)) {
-                    Toast.makeText(MainActivity.this, "Please fill out all fields", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginPage.this, "Please fill out all fields", Toast.LENGTH_LONG).show();
                 } else {
                     ref = new Firebase("https://incandescent-fire-7723.firebaseIO.com/");
 
                     ref.authWithPassword(psnEmail.getText().toString(), psnPass.getText().toString(), new Firebase.AuthResultHandler() {
                         @Override
                         public void onAuthenticated(AuthData authData) {
-                            Toast.makeText(MainActivity.this, "Log in success!", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(MainActivity.this, Intro1.class));
+                            Toast.makeText(LoginPage.this, "Log in success!", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(LoginPage.this, Intro1.class));
                         }
 
                         @Override
                         public void onAuthenticationError(FirebaseError firebaseError) {
-                            Toast.makeText(MainActivity.this, firebaseError.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginPage.this, firebaseError.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
                 }
