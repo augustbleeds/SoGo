@@ -47,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     ref.createUser(psnEmail.getText().toString(), psnPass.getText().toString(), new Firebase.ValueResultHandler<Map<String, Object>>() {
                         @Override
                         public void onSuccess(Map<String, Object> result) {
-                            Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(MainActivity.this, intro1.class));
+                            Toast.makeText(MainActivity.this, "Sign up success! Now log in!", Toast.LENGTH_LONG).show();
                         }
                         @Override
                         public void onError(FirebaseError firebaseError) {
@@ -70,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
                     ref.authWithPassword(psnEmail.getText().toString(), psnPass.getText().toString(), new Firebase.AuthResultHandler() {
                         @Override
                         public void onAuthenticated(AuthData authData) {
-                            Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Log in success!", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(MainActivity.this, Intro1.class));
                         }
 
                         @Override
