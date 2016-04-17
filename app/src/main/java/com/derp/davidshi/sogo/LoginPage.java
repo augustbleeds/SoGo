@@ -1,6 +1,8 @@
 package com.derp.davidshi.sogo;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -47,7 +49,31 @@ public class LoginPage extends AppCompatActivity {
                     ref.createUser(psnEmail.getText().toString(), psnPass.getText().toString(), new Firebase.ValueResultHandler<Map<String, Object>>() {
                         @Override
                         public void onSuccess(Map<String, Object> result) {
-                            Toast.makeText(LoginPage.this, "Sign up success! Now log in!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginPage.this, "Sign up success!", Toast.LENGTH_LONG).show();
+
+                            ref.authWithPassword(psnEmail.getText().toString(), psnPass.getText().toString(), new Firebase.AuthResultHandler() {
+                                @Override
+                                public void onAuthenticated(AuthData authData) {
+                                    SharedPreferences settings;
+                                    SharedPreferences.Editor editor;
+                                    settings = getApplicationContext().getSharedPreferences("Accntprefs", Context.MODE_PRIVATE);
+                                    editor = settings.edit();
+
+                                    editor.putString("UserID", authData.getUid());
+                                    editor.commit();
+
+                                    ref.child("userid").child("person" + 4).setValue(authData.getUid());
+
+                                    startActivity(new Intent(LoginPage.this, Intro1.class));
+
+                                    finish();
+                                }
+
+                                @Override
+                                public void onAuthenticationError(FirebaseError firebaseError) {
+                                    Toast.makeText(LoginPage.this, firebaseError.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                         @Override
                         public void onError(FirebaseError firebaseError) {
@@ -70,7 +96,18 @@ public class LoginPage extends AppCompatActivity {
                         @Override
                         public void onAuthenticated(AuthData authData) {
                             Toast.makeText(LoginPage.this, "Log in success!", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(LoginPage.this, Intro1.class));
+                            SharedPreferences settings;
+                            SharedPreferences.Editor editor;
+                            settings = getApplicationContext().getSharedPreferences("Accntprefs", Context.MODE_PRIVATE);
+                            editor = settings.edit();
+
+                            editor.putString("UserID", authData.getUid());
+                            editor.commit();
+
+                            startActivity(new Intent(LoginPage.this, Matches.class));
+
+                            // Prevents user from going back to this LoginPage
+                            //finish();
                         }
 
                         @Override

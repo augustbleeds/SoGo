@@ -3,6 +3,8 @@
     package="com.derp.davidshi.sogo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +22,17 @@
         <activity
             android:name=".Intro1"
             android:label="@string/title_activity_intro1"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Matches"
+            android:label="@string/title_activity_main_page"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".MyService"
+            android:label="My Service"></service>
+
+        <activity android:name=".MatchesPage"></activity>
     </application>
 
 </manifest>

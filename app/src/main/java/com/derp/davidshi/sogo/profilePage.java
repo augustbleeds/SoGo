@@ -9,25 +9,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class Intro1 extends AppCompatActivity {
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
-    private String userID;
-    private Button bFitness, bAcademics, bFriends, bOther;
-    private TextView first_name, last_name;
+public class profilePage extends AppCompatActivity {
 
-    private void saveName(){
-        // shared setting stuff
+    private String userID, matchID;
+    private Button btnMatchPage, bFitness, bAcademics, bFriends, bOther;
+    private TextView match_results;
+
+    private String getMatchID(){
+        // shared preferences
         SharedPreferences settings;
-        SharedPreferences.Editor editor;
         settings = getApplicationContext().getSharedPreferences("Accntprefs", Context.MODE_PRIVATE);
-        editor = settings.edit();
-
-        editor.putString("FirstName",first_name.getText().toString());
-        editor.putString("LastName",last_name.getText().toString());
-
-        editor.commit();
-
-        return;
+        return settings.getString("Match", null);
     }
 
     @Override
@@ -36,17 +33,14 @@ public class Intro1 extends AppCompatActivity {
         setContentView(R.layout.activity_intro1);
 
 
-
         // shared preferences
         SharedPreferences settings;
         settings = getApplicationContext().getSharedPreferences("Accntprefs", Context.MODE_PRIVATE);
         userID = settings.getString("UserID", null);
 
-        // set name form
-        first_name = (TextView) findViewById(R.id.first_name);
-        last_name = (TextView) findViewById(R.id.last_name);
 
         // set buttons
+        btnMatchPage = (Button) findViewById(R.id.btnMatchPage);
         bFitness = (Button) findViewById(R.id.fitness);
         bAcademics = (Button) findViewById(R.id.academics);
         bFriends = (Button) findViewById(R.id.friends);
@@ -55,6 +49,12 @@ public class Intro1 extends AppCompatActivity {
 
 
         // add listeners
+        View.OnClickListener btnMatchPage = new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(Matches.this, MatchesPage.class));
+            }
+
         View.OnClickListener fitnessList = new View.OnClickListener() {
             @Override
             public void onClick(View v){
@@ -67,11 +67,9 @@ public class Intro1 extends AppCompatActivity {
                 editor.putString("Category","Fitness");
                 editor.commit();
 
-                // save name
-                saveName();
 
                 // to do: switch activities
-                startActivity(new Intent(Intro1.this, listGoals.class));
+                startActivity(new Intent(profilePage.this, listGoals.class));
                 return;
             }
         };
@@ -88,10 +86,9 @@ public class Intro1 extends AppCompatActivity {
                 editor.putString("Category","Academics");
                 editor.commit();
 
-                saveName();
 
                 // to do: switch activities
-                startActivity(new Intent(Intro1.this, listGoals.class));
+                startActivity(new Intent(profilePage.this, listGoals.class));
                 return;
             }
         };
@@ -108,9 +105,7 @@ public class Intro1 extends AppCompatActivity {
                 editor.putString("Category","Friends");
                 editor.commit();
 
-                saveName();
-
-                startActivity(new Intent(Intro1.this, listGoals.class));
+                startActivity(new Intent(profilePage.this, listGoals.class));
                 return;
             }
         };
@@ -127,13 +122,10 @@ public class Intro1 extends AppCompatActivity {
                 editor.putString("Category","Other");
                 editor.commit();
 
-                saveName();
-
-                startActivity(new Intent(Intro1.this, listGoals.class));
+                startActivity(new Intent(profilePage.this, listGoals.class));
                 return;
             }
         };
-
 
 
         // set listeners to listen
@@ -142,6 +134,37 @@ public class Intro1 extends AppCompatActivity {
         bFriends.setOnClickListener(friendsList);
         bOther.setOnClickListener(otherList);
 
+        // now we need to display the matched results!
+        matchID = getMatchID();
+
+        Firebase ref = new Firebase("https://incandescent-fire-7723.firebaseIO.com/");
+
+
+
+        // Attach an listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                snapshot.child("users").child(matchID);
+                return;
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+                return;
+            }
+
+        });
+
+        // change the value to force a Data Change
+
+        ref.child("Changethis").setValue(Math.random());
+
+
+
 
     }
+
+
 }
